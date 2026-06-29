@@ -4,136 +4,206 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Gastos</title>
-    <!-- Tailwind CSS para un diseño limpio y moderno -->
+    <!-- Tailwind CSS para diseño moderno -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen py-8 px-4 font-sans">
+<body class="bg-gray-900 text-gray-100 min-h-screen py-6 px-4 font-sans antialiased">
 
-    <div class="max-w-xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Control de Gastos</h1>
+    <div class="max-w-md mx-auto bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden p-5">
         
+        <!-- Encabezado -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-xl font-bold tracking-wide text-white">Control de Gastos</h1>
+            <span class="bg-blue-500/20 text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-blue-500/30">Móvil Premium</span>
+        </div>
+        
+        <!-- Tarjeta de Balance Total -->
+        <div class="bg-gradient-to-br from-blue-600 to-indigo-700 p-5 rounded-xl mb-6 shadow-lg shadow-blue-900/20">
+            <p class="text-blue-100 text-sm font-medium mb-1">Total Gastado General</p>
+            <div class="flex justify-between items-baseline">
+                <span id="total-amount" class="text-3xl font-extrabold tracking-tight">0.00</span>
+                <span class="text-xs text-blue-200 bg-white/10 px-2 py-0.5 rounded">Bs / $</span>
+            </div>
+        </div>
+
         <!-- Formulario de Registro -->
-        <form id="expense-form" class="space-y-4 mb-8">
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Monto</label>
-                <input type="number" id="amount" step="0.01" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-50 border focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
+        <form id="expense-form" class="space-y-4 mb-6 bg-gray-850 p-4 rounded-xl border border-gray-700/50">
+            <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Nuevo Registro</h2>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Monto</label>
+                    <input type="number" id="amount" step="0.01" required class="block w-full rounded-lg bg-gray-700 border-none text-white font-bold p-3 focus:ring-2 focus:ring-blue-500 text-lg placeholder-gray-500" placeholder="0.00">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Fecha</label>
+                    <input type="date" id="date" required class="block w-full rounded-lg bg-gray-700 border-none text-white p-3 focus:ring-2 focus:ring-blue-500 text-sm">
+                </div>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700">Categoría</label>
-                <select id="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-50 border focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="Alimentación">Alimentación</option>
-                    <option value="Transporte">Transporte</option>
-                    <option value="Pagos de Servicios">Pagos de Servicios</option>
-                    <option value="Gasolina">Gasolina</option>
-                    <option value="Insumos de Taller">Insumos de Taller</option>
-                    <option value="Otros">Otros</option>
+                <label class="block text-xs font-medium text-gray-400 mb-1">Categoría</label>
+                <select id="category" class="block w-full rounded-lg bg-gray-700 border-none text-white p-3 focus:ring-2 focus:ring-blue-500 text-sm">
+                    <option value="Alimentación">🍔 Alimentación</option>
+                    <option value="Transporte">🚌 Transporte</option>
+                    <option value="Pagos de Servicios">💡 Pagos de Servicios</option>
+                    <option value="Gasolina">⛽ Gasolina</option>
+                    <option value="Insumos de Taller">🛠️ Insumos de Taller</option>
+                    <option value="Otros">📦 Otros</option>
                 </select>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700">Descripción (Opcional)</label>
-                <input type="text" id="description" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-50 border focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ej. Repuestos, almorzo, etc.">
+                <label class="block text-xs font-medium text-gray-400 mb-1">Descripción</label>
+                <input type="text" id="description" class="block w-full rounded-lg bg-gray-700 border-none text-white p-3 focus:ring-2 focus:ring-blue-500 text-sm placeholder-gray-500" placeholder="Ej. Filtros, almuerzo, luz...">
             </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Fecha</label>
-                <input type="date" id="date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-50 border focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-
-            <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded-md font-semibold hover:bg-blue-700 transition duration-200">Registrar Gasto</button>
+            <button type="submit" class="w-full bg-blue-500 text-white p-3 rounded-lg font-bold hover:bg-blue-600 active:scale-[0.98] transition duration-150 shadow-md shadow-blue-500/10">
+                ＋ Añadir Gasto
+            </button>
         </form>
 
-        <hr class="mb-6">
-
-        <!-- Resumen Total -->
-        <div class="bg-blue-50 p-4 rounded-lg mb-6 flex justify-between items-center">
-            <span class="text-blue-800 font-semibold text-lg">Total Gastado:</span>
-            <span id="total-amount" class="text-2xl font-bold text-blue-950">0.00</span>
+        <!-- Resumen por Categorías -->
+        <div class="mb-6">
+            <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Distribución de Gastos</h2>
+            <div id="category-summary" class="grid grid-cols-2 gap-2 text-xs">
+                <!-- Se inyecta dinámicamente -->
+            </div>
         </div>
 
-        <!-- Lista de Gastos -->
+        <!-- Historial de Gastos -->
         <div>
-            <h2 class="text-lg font-semibold text-gray-700 mb-3">Historial de Gastos</h2>
-            <ul id="expense-list" class="space-y-2 max-h-60 overflow-y-auto">
-                <!-- Los gastos se inyectarán aquí dinámicamente -->
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Historial Reciente</h2>
+                <button onclick="exportToText()" class="text-xs text-blue-400 hover:underline">📤 Compartir Reporte</button>
+            </div>
+            <ul id="expense-list" class="space-y-2.5 max-h-64 overflow-y-auto pr-1">
+                <!-- Los gastos se inyectarán aquí -->
             </ul>
         </div>
     </div>
 
     <script>
-        // Lógica de la Aplicación
         const expenseForm = document.getElementById('expense-form');
         const expenseList = document.getElementById('expense-list');
         const totalAmountEl = document.getElementById('total-amount');
+        const categorySummaryEl = document.getElementById('category-summary');
 
-        // Cargar gastos guardados o inicializar vacío
         let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
-
-        // Establecer la fecha de hoy por defecto
         document.getElementById('date').valueAsDate = new Date();
 
         function updateUI() {
-            // Limpiar lista
             expenseList.innerHTML = '';
             let total = 0;
+            
+            // Inicializar acumuladores de categorías
+            const categoriesTotal = {
+                "Alimentación": 0, "Transporte": 0, "Pagos de Servicios": 0,
+                "Gasolina": 0, "Insumos de Taller": 0, "Otros": 0
+            };
 
-            // Renderizar cada gasto
             expenses.forEach((expense, index) => {
-                total += parseFloat(expense.amount);
+                const amt = parseFloat(expense.amount);
+                total += amt;
+                
+                // Sumar al desglose por categoría
+                if (categoriesTotal[expense.category] !== undefined) {
+                    categoriesTotal[expense.category] += amt;
+                } else {
+                    categoriesTotal["Otros"] += amt;
+                }
+
+                // Iconos rápidos para la lista
+                let icon = "📦";
+                if(expense.category === "Alimentación") icon = "🍔";
+                if(expense.category === "Transporte") icon = "🚌";
+                if(expense.category === "Pagos de Servicios") icon = "💡";
+                if(expense.category === "Gasolina") icon = "⛽";
+                if(expense.category === "Insumos de Taller") icon = "🛠️";
 
                 const li = document.createElement('li');
-                li.className = "flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-200 shadow-sm";
+                li.className = "flex justify-between items-center p-3 bg-gray-800/60 rounded-xl border border-gray-700/50 shadow-sm";
                 li.innerHTML = `
-                    <div class="flex-1">
-                        <div class="flex justify-between mb-1">
-                            <span class="font-semibold text-gray-800">${expense.category}</span>
-                            <span class="text-sm text-gray-500">${expense.date}</span>
+                    <div class="flex items-center space-x-3">
+                        <span class="text-xl p-1.5 bg-gray-700 rounded-lg">${icon}</span>
+                        <div>
+                            <p class="font-semibold text-sm text-white">${expense.description || expense.category}</p>
+                            <p class="text-[11px] text-gray-400">${expense.date} • <span class="text-blue-400">${expense.category}</span></p>
                         </div>
-                        <p class="text-sm text-gray-600">${expense.description || 'Sin descripción'}</p>
                     </div>
-                    <div class="flex items-center ml-4">
-                        <span class="font-bold text-gray-900 mr-3">${parseFloat(expense.amount).toFixed(2)}</span>
-                        <button onclick="deleteExpense(${index})" class="text-red-500 hover:text-red-700 font-bold text-sm">✕</button>
+                    <div class="flex items-center space-x-3">
+                        <span class="font-bold text-sm text-white">${amt.toFixed(2)}</span>
+                        <button onclick="deleteExpense(${index})" class="text-gray-500 hover:text-red-400 font-bold p-1">✕</button>
                     </div>
                 `;
                 expenseList.appendChild(li);
             });
 
-            // Actualizar total
+            // Actualizar Total General
             totalAmountEl.textContent = total.toFixed(2);
+
+            // Renderizar Resumen de Categorías
+            categorySummaryEl.innerHTML = '';
+            for (const [cat, val] of Object.entries(categoriesTotal)) {
+                if (val > 0) {
+                    const div = document.createElement('div');
+                    div.className = "bg-gray-850 p-2.5 rounded-lg border border-gray-700/30 flex justify-between items-center";
+                    div.innerHTML = `
+                        <span class="text-gray-400 truncate mr-1">${cat}</span>
+                        <span class="font-bold text-white">${val.toFixed(2)}</span>
+                    `;
+                    categorySummaryEl.appendChild(div);
+                }
+            }
             
-            // Guardar en LocalStorage
             localStorage.setItem('expenses', JSON.stringify(expenses));
         }
 
-        // Agregar Gasto
         expenseForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
+            // Guardar solo el nombre limpio de la categoría quitando el emoji
+            const rawCategory = document.getElementById('category').value;
+            const cleanCategory = rawCategory.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDC00-\uDFFF]/g, '').trim();
+
             const newExpense = {
                 amount: document.getElementById('amount').value,
-                category: document.getElementById('category').value,
+                category: cleanCategory,
                 description: document.getElementById('description').value,
                 date: document.getElementById('date').value
             };
 
-            expenses.unshift(newExpense); // Añadir al inicio de la lista
+            expenses.unshift(newExpense);
             updateUI();
 
-            // Resetear formulario (excepto la fecha)
             document.getElementById('amount').value = '';
             document.getElementById('description').value = '';
             document.getElementById('date').valueAsDate = new Date();
         });
 
-        // Eliminar Gasto
         function deleteExpense(index) {
-            expenses.splice(index, 1);
-            updateUI();
+            if(confirm("¿Seguro que quieres borrar este registro?")) {
+                expenses.splice(index, 1);
+                updateUI();
+            }
         }
 
-        // Cargar datos al iniciar
+        function exportToText() {
+            if(expenses.length === 0) return alert("No hay gastos registrados para compartir.");
+            
+            let text = `📋 *REPORTE DE GASTOS*\n`;
+            let total = 0;
+            expenses.forEach(e => {
+                text += `• [${e.date}] ${e.category}: ${parseFloat(e.amount).toFixed(2)} (${e.description || 'Sin detalle'})\n`;
+                total += parseFloat(e.amount);
+            });
+            text += `\n💰 *TOTAL GASTADO:* ${total.toFixed(2)}`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert("¡Reporte copiado al portapapeles! Ya puedes pegarlo en WhatsApp.");
+            });
+        }
+
         updateUI();
     </script>
 </body>
