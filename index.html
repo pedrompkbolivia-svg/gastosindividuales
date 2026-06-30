@@ -107,7 +107,7 @@
             const { data, error } = await clientSupabase
                 .from('gastos')
                 .select('*')
-                .order('id_gasto', { ascending: false }); // CAMBIADO A TU ID REAL: id_gasto
+                .order('id', { ascending: false }); // Usando la columna 'id' que sí existe en tu tabla
 
             if (error) {
                 console.error(error);
@@ -162,9 +162,9 @@
                     </div>
                     <div class="flex items-center space-x-3">
                         <span class="font-bold text-sm text-white">${amt.toFixed(2)}</span>
-                        <button onclick="deleteExpense(${expense.id_gasto})" class="text-gray-500 hover:text-red-400 font-bold p-1">✕</button>
+                        <button onclick="deleteExpense(${expense.id})" class="text-gray-500 hover:text-red-400 font-bold p-1">✕</button>
                     </div>
-                `; // CAMBIADO A TU ID REAL: expense.id_gasto
+                `; // Usando expense.id de forma correcta
                 expenseList.appendChild(li);
             });
 
@@ -210,10 +210,10 @@
             }
         });
 
-        // Eliminar registro desde la nube usando la columna 'id_gasto'
-        async function deleteExpense(id_gasto) {
+        // Eliminar registro desde la nube usando la columna 'id'
+        async function deleteExpense(id) {
             if(confirm("¿Seguro que quieres borrar este registro de la nube?")) {
-                const { error } = await clientSupabase.from('gastos').delete().eq('id_gasto', id_gasto); // CAMBIADO A TU ID REAL: id_gasto
+                const { error } = await clientSupabase.from('gastos').delete().eq('id', id);
                 if (error) {
                     alert("Error al eliminar de la nube");
                 } else {
