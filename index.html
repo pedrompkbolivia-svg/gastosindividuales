@@ -86,7 +86,6 @@
         const SUPABASE_URL = "https://ucrmprqhwmzjregdzago.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_ODCQ41kCRqaF5p_TmeBc5Q_pyxzOuqi"; 
         
-        // Inicializar el cliente una sola vez de forma correcta
         const clientSupabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         // ==========================================
 
@@ -104,10 +103,11 @@
             statusCloud.textContent = "Sincronizando...";
             statusCloud.className = "bg-yellow-500/20 text-yellow-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-yellow-500/30";
             
+            // CORREGIDO: Solicitamos explícitamente ordenar por tu columna id_gasto real
             const { data, error } = await clientSupabase
                 .from('gastos')
                 .select('*')
-                .order('id', { ascending: false }); // Usando la columna 'id' que sí existe en tu tabla
+                .order('id_gasto', { ascending: false });
 
             if (error) {
                 console.error(error);
@@ -162,9 +162,9 @@
                     </div>
                     <div class="flex items-center space-x-3">
                         <span class="font-bold text-sm text-white">${amt.toFixed(2)}</span>
-                        <button onclick="deleteExpense(${expense.id})" class="text-gray-500 hover:text-red-400 font-bold p-1">✕</button>
+                        <button onclick="deleteExpense(${expense.id_gasto})" class="text-gray-500 hover:text-red-400 font-bold p-1">✕</button>
                     </div>
-                `; // Usando expense.id de forma correcta
+                `; // CORREGIDO: Usa expense.id_gasto para borrar de forma exacta
                 expenseList.appendChild(li);
             });
 
@@ -210,10 +210,10 @@
             }
         });
 
-        // Eliminar registro desde la nube usando la columna 'id'
-        async function deleteExpense(id) {
+        // Eliminar registro desde la nube usando id_gasto
+        async function deleteExpense(id_gasto) {
             if(confirm("¿Seguro que quieres borrar este registro de la nube?")) {
-                const { error } = await clientSupabase.from('gastos').delete().eq('id', id);
+                const { error } = await clientSupabase.from('gastos').delete().eq('id_gasto', id_gasto); // CORREGIDO: Filtra por id_gasto
                 if (error) {
                     alert("Error al eliminar de la nube");
                 } else {
