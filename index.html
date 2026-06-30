@@ -81,14 +81,14 @@
 
     <script>
         // ==========================================
-        // CONFIGURACIÓN DE ACCESOS CONECTADA
+        // CONFIGURACIÓN DE ACCESOS ÚNICA CONECTADA
         // ==========================================
         const SUPABASE_URL = "https://ucrmprqhwmzjregdzago.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_ODCQ41kCRqaF5p_TmeBc5Q_pyxzOuqi"; 
+        
+        // Inicializar el cliente una sola vez de forma correcta
+        const clientSupabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         // ==========================================
-
-        // Inicializar el cliente de Supabase
-        const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         const expenseForm = document.getElementById('expense-form');
         const expenseList = document.getElementById('expense-list');
@@ -104,10 +104,10 @@
             statusCloud.textContent = "Sincronizando...";
             statusCloud.className = "bg-yellow-500/20 text-yellow-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-yellow-500/30";
             
-            const { data, error } = await supabase
+            const { data, error } = await clientSupabase
                 .from('gastos')
                 .select('*')
-                .order('id_gasto', { ascending: false }); // Usando tu columna id_gasto real
+                .order('id_gasto', { ascending: false }); // CAMBIADO A TU ID REAL: id_gasto
 
             if (error) {
                 console.error(error);
@@ -131,7 +131,6 @@
             };
 
             expenses.forEach((expense) => {
-                // Mapeo exacto de las columnas de tu Supabase original
                 const amt = parseFloat(expense.amount || 0);
                 total += amt;
                 const cat = expense.category || "Otros";
@@ -165,7 +164,7 @@
                         <span class="font-bold text-sm text-white">${amt.toFixed(2)}</span>
                         <button onclick="deleteExpense(${expense.id_gasto})" class="text-gray-500 hover:text-red-400 font-bold p-1">✕</button>
                     </div>
-                `;
+                `; // CAMBIADO A TU ID REAL: expense.id_gasto
                 expenseList.appendChild(li);
             });
 
@@ -185,7 +184,7 @@
             }
         }
 
-        // Registrar nuevo gasto usando los nombres exactos de tu base de datos
+        // Registrar nuevo gasto en la nube
         expenseForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -199,7 +198,7 @@
                 date: document.getElementById('date').value
             };
 
-            const { error } = await supabase.from('gastos').insert([newExpense]);
+            const { error } = await clientSupabase.from('gastos').insert([newExpense]);
 
             if (error) {
                 alert("Error al guardar en la nube: " + error.message);
@@ -211,10 +210,10 @@
             }
         });
 
-        // Eliminar registro desde la nube usando id_gasto
+        // Eliminar registro desde la nube usando la columna 'id_gasto'
         async function deleteExpense(id_gasto) {
             if(confirm("¿Seguro que quieres borrar este registro de la nube?")) {
-                const { error } = await supabase.from('gastos').delete().eq('id_gasto', id_gasto);
+                const { error } = await clientSupabase.from('gastos').delete().eq('id_gasto', id_gasto); // CAMBIADO A TU ID REAL: id_gasto
                 if (error) {
                     alert("Error al eliminar de la nube");
                 } else {
