@@ -107,7 +107,7 @@
             const { data, error } = await supabase
                 .from('gastos')
                 .select('*')
-                .order('id_gasto', { ascending: false });
+                .order('id_gasto', { ascending: false }); // Usando tu columna id_gasto real
 
             if (error) {
                 console.error(error);
@@ -131,12 +131,12 @@
             };
 
             expenses.forEach((expense) => {
-                // Adaptamos la lectura para mapear 'monto', 'categoria', 'descripcion', 'fecha' en español
-                const amt = parseFloat(expense.monto || expense.amount || 0);
+                // Mapeo exacto de las columnas de tu Supabase original
+                const amt = parseFloat(expense.amount || 0);
                 total += amt;
-                const cat = expense.categoria || expense.category || "Otros";
-                const desc = expense.descripcion || expense.description || "";
-                const fechaGasto = expense.fecha || expense.date || "";
+                const cat = expense.category || "Otros";
+                const desc = expense.description || "";
+                const fechaGasto = expense.date || "";
                 
                 if (categoriesTotal[cat] !== undefined) {
                     categoriesTotal[cat] += amt;
@@ -185,19 +185,18 @@
             }
         }
 
-        // Registrar un nuevo gasto directo en la nube adaptando los nombres en español
+        // Registrar nuevo gasto usando los nombres exactos de tu base de datos
         expenseForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const rawCategory = document.getElementById('category').value;
             const cleanCategory = rawCategory.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDC00-\uDFFF]/g, '').trim();
 
-            // Mapeamos exactamente los nombres que Supabase tiene creados en tu base de datos
             const newExpense = {
-                monto: parseFloat(document.getElementById('amount').value),
-                categoria: cleanCategory,
-                descripcion: document.getElementById('description').value,
-                fecha: document.getElementById('date').value
+                amount: parseFloat(document.getElementById('amount').value),
+                category: cleanCategory,
+                description: document.getElementById('description').value,
+                date: document.getElementById('date').value
             };
 
             const { error } = await supabase.from('gastos').insert([newExpense]);
@@ -212,7 +211,7 @@
             }
         });
 
-        // Eliminar registro desde la nube usando su id_gasto
+        // Eliminar registro desde la nube usando id_gasto
         async function deleteExpense(id_gasto) {
             if(confirm("¿Seguro que quieres borrar este registro de la nube?")) {
                 const { error } = await supabase.from('gastos').delete().eq('id_gasto', id_gasto);
@@ -230,10 +229,10 @@
             let text = `📋 *REPORTE DE GASTOS*\n`;
             let total = 0;
             expenses.forEach(e => {
-                const amt = parseFloat(e.monto || e.amount || 0);
-                const cat = e.categoria || e.category || "Otros";
-                const desc = e.descripcion || e.description || "Sin detalle";
-                const fechaGasto = e.fecha || e.date || "";
+                const amt = parseFloat(e.amount || 0);
+                const cat = e.category || "Otros";
+                const desc = e.description || "Sin detalle";
+                const fechaGasto = e.date || "";
                 
                 text += `• [${fechaGasto}] ${cat}: ${amt.toFixed(2)} (${desc})\n`;
                 total += amt;
